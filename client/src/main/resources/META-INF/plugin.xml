@@ -1,0 +1,27 @@
+<idea-plugin>
+    <id>org.example.langClient</id>
+    <name>LangClient</name>
+    <vendor email="" url="">example</vendor>
+
+    <description>A very useful description about how great this client will be.</description>
+
+    <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
+         on how to target different products -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <!-- Add your extensions here -->
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+        <action id="org.example.langClient.ruleActions.PullAction" class="org.example.langClient.ruleActions.PullAction"
+                text="Pull Rules" description="Pull rules from repository">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+        <action id="org.example.langClient.ruleActions.PushAction" class="org.example.langClient.ruleActions.PushAction"
+                text="Push Rule" description="Push local rule to repository">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+        </action>
+    </actions>
+</idea-plugin>
