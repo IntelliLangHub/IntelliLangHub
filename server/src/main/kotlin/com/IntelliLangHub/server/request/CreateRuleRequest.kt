@@ -1,8 +1,10 @@
 package com.intellilanghub.server.request
 
-class RuleRequest(
+class CreateRuleRequest(
     val name: String,
-    val rule: String,
+    val injection: String,
     val library: String,
 )
+
+
 
