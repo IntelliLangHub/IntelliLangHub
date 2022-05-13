@@ -31,11 +31,11 @@ class PullAction : AnAction() {
         val serverUrl = "http://localhost:8090"
 
         val libTable = LibraryTablesRegistrar.getInstance()
-        val libs : MutableList<Library> = ArrayList()
+        val libs: MutableList<Library> = ArrayList()
         //libs.addAll(libTable.libraryTable.libraries)
         libs.addAll(libTable.getLibraryTable(project).libraries)
 
-        val rules : MutableList<String> = ArrayList()
+        val rules: MutableList<String> = ArrayList()
         for (lib in libs) {
             val matchResult = libNameRegex.matchEntire(lib.name ?: continue)
             val nameStripped = matchResult?.groupValues?.get(1) ?: continue
@@ -51,8 +51,10 @@ class PullAction : AnAction() {
 
                 rules.addAll(Json.decodeFromString<List<String>>(response.body()))
             } catch (ex: Exception) {
-                Messages.showWarningDialog(project,
-                    "Cannot get rules", "Request Error")
+                Messages.showWarningDialog(
+                    project,
+                    "Cannot get rules", "Request Error"
+                )
                 return
             }
         }
@@ -80,8 +82,10 @@ class PullAction : AnAction() {
                 "Rules have been imported", "Import Successful", Messages.getInformationIcon()
             )
         } else {
-            Messages.showWarningDialog(project,
-                "Errors occurred, not all rules were imported", "Import Errors")
+            Messages.showWarningDialog(
+                project,
+                "Errors occurred, not all rules were imported", "Import Errors"
+            )
         }
     }
 }
