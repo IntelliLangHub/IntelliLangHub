@@ -20,9 +20,13 @@
                 text="Pull Rules" description="Pull rules from repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
+        <!--
+        OUTDATED
+
         <action id="org.example.langClient.ruleActions.PushAction" class="org.example.langClient.ruleActions.PushAction"
                 text="Push Rule" description="Push local rule to repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
+        -->
     </actions>
 </idea-plugin>
