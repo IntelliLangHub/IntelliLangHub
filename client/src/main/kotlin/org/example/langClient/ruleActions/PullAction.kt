@@ -16,16 +16,6 @@ import java.net.http.HttpResponse
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
-@Suppress("PROVIDED_RUNTIME_TOO_LOW")  // https://github.com/Kotlin/kotlinx.serialization/issues/993
-@Serializable
-data class PulledInjectionPack(
-    val name: String,
-    val rule: String,
-    val library: String,
-    val createdDate: String,
-    val id: String
-)
-
 val libNameRegex = Regex("^.+?:\\s*(.+)\\s*:.*\$") // Probably needs refactoring
 
 class PullAction : AnAction() {
@@ -45,19 +35,21 @@ class PullAction : AnAction() {
         //libs.addAll(libTable.libraryTable.libraries)
         libs.addAll(libTable.getLibraryTable(project).libraries)
 
-        val packs : MutableList<PulledInjectionPack> = ArrayList()
+        val rules : MutableList<String> = ArrayList()
         for (lib in libs) {
             val matchResult = libNameRegex.matchEntire(lib.name ?: continue)
             val nameStripped = matchResult?.groupValues?.get(1) ?: continue
 
             try {
                 val request: HttpRequest = HttpRequest.newBuilder()
-                    .uri(URI.create("$serverUrl/$nameStripped"))
+                    .uri(URI.create("$serverUrl/injection-pack/$nameStripped"))
                     .build()
 
                 val client: HttpClient = HttpClient.newBuilder().build()
                 val response = client.send(request, HttpResponse.BodyHandlers.ofString())
-                packs.addAll(Json.decodeFromString<List<PulledInjectionPack>>(response.body()))
+                if (response.statusCode() == 404) continue
+
+                rules.addAll(Json.decodeFromString<List<String>>(response.body()))
             } catch (ex: Exception) {
                 Messages.showWarningDialog(project,
                     "Cannot get rules", "Request Error")
@@ -67,16 +59,16 @@ class PullAction : AnAction() {
 
         var hasImportErrors = false
 
-        for (pack in packs) {
+        for (rule in rules) {
             try {
-                val cfgStream = pack.rule.byteInputStream()
+                val cfgStream = rule.byteInputStream()
                 val cfg = Configuration.load(cfgStream) ?: continue
 
                 val injections: MutableList<BaseInjection> = ArrayList()
                 for (supportId in InjectorUtils.getActiveInjectionSupportIds()) {
                     injections.addAll(cfg.getInjections(supportId))
                 }
-                Configuration.getProjectInstance(project).replaceInjections(injections, emptyList(), false)
+                Configuration.getProjectInstance(project).replaceInjections(injections, injections, false)
             } catch (ex: Exception) {
                 hasImportErrors = true
             }
