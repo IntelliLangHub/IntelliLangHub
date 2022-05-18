@@ -17,16 +17,13 @@
     <actions>
         <!-- Add your actions here -->
         <action id="org.example.langClient.ruleActions.PullAction" class="org.example.langClient.ruleActions.PullAction"
-                text="Pull Rules" description="Pull rules from repository">
+                text="Pull Injections" description="Pull injections from repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
-        <!--
-        OUTDATED
 
         <action id="org.example.langClient.ruleActions.PushAction" class="org.example.langClient.ruleActions.PushAction"
-                text="Push Rule" description="Push local rule to repository">
+                text="Commit Injection" description="Commit injection to repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
-        -->
     </actions>
 </idea-plugin>
