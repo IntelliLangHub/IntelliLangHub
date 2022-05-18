@@ -53,7 +53,7 @@ class PullAction : AnAction() {
             } catch (ex: Exception) {
                 Messages.showWarningDialog(
                     project,
-                    "Cannot get rules", "Request Error"
+                    "Cannot get injections", "Request Error"
                 )
                 return
             }
@@ -79,12 +79,12 @@ class PullAction : AnAction() {
         if (!hasImportErrors) {
             Messages.showMessageDialog(
                 project,
-                "Rules have been imported", "Import Successful", Messages.getInformationIcon()
+                "Injections have been imported", "Import Successful", Messages.getInformationIcon()
             )
         } else {
             Messages.showWarningDialog(
                 project,
-                "Errors occurred, not all rules were imported", "Import Errors"
+                "Errors occurred, not all injections were imported", "Import Errors"
             )
         }
     }

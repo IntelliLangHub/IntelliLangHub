@@ -2,7 +2,6 @@ package org.example.langClient.ruleActions
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
-import com.intellij.openapi.actionSystem.CommonDataKeys
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
 import kotlinx.serialization.*
@@ -16,41 +15,63 @@ import java.net.http.HttpResponse
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")  // https://github.com/Kotlin/kotlinx.serialization/issues/993
 @Serializable
 data class PushedInjection(
-    val name: String,
-    val rule: String?,
     val library: String,
+    val injections: List<String>,
 )
 
 class PushAction : AnAction() {
     override fun update(e: AnActionEvent) {
-        val project = e.project
-        val editor = e.getData(CommonDataKeys.EDITOR)
-
-        e.presentation.isEnabledAndVisible = (project != null && editor != null && editor.selectionModel.hasSelection())
+        super.update(e)
     }
 
     override fun actionPerformed(e: AnActionEvent) {
         val project: Project? = e.project
-        val editor = e.getData(CommonDataKeys.EDITOR)
 
         val serverUrl = "http://localhost:8090"
 
-        val rule = editor?.selectionModel?.selectedText
-        if (rule == null) {
-            Messages.showMessageDialog(project, "No text was selected.", "Error", Messages.getInformationIcon())
+        val libName =
+            Messages.showInputDialog(project, "Enter library name", "Library Name", Messages.getQuestionIcon())
+        if (libName == null) {
+            Messages.showWarningDialog(project, "Library name was not specified", "Specify Library Name")
             return
         }
-        val injection = PushedInjection("Test Rule", rule, "testlib")
+        val rule = Messages.showMultilineInputDialog(
+            project,
+            "Enter injection configuration",
+            "Injection",
+            null,
+            Messages.getQuestionIcon(),
+            null
+        )
+        if (rule == null) {
+            Messages.showWarningDialog(project, "Injection configuration was not specified", "Specify Injection")
+            return
+        }
 
-        val request : HttpRequest = HttpRequest.newBuilder()
-            .uri(URI.create(serverUrl))
-            .header("Content-Type", "application/json")
-            .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(injection)))
-            .build()
+        val injection = PushedInjection(libName, listOf(rule))
 
-        val client: HttpClient = HttpClient.newBuilder().build()
-        val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+        try {
+            val request: HttpRequest = HttpRequest.newBuilder()
+                .uri(URI.create("$serverUrl/injection-pack-commit"))
+                .header("Content-Type", "application/json")
+                .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(injection)))
+                .build()
 
-        Messages.showMessageDialog(project, response.body(), "Created Rule", Messages.getInformationIcon())
+            val client: HttpClient = HttpClient.newBuilder().build()
+            client.send(request, HttpResponse.BodyHandlers.ofString())
+        } catch (ex: Exception) {
+            Messages.showWarningDialog(
+                project,
+                "Cannot send injection", "Request Error"
+            )
+            return
+        }
+
+        Messages.showMessageDialog(
+            project,
+            "Your injection will appear in the repository after moderation",
+            "Injection Created",
+            Messages.getInformationIcon()
+        )
     }
 }
