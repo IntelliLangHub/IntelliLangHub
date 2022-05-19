@@ -1,9 +1,14 @@
 <idea-plugin>
     <id>org.example.langClient</id>
-    <name>LangClient</name>
-    <vendor email="" url="">example</vendor>
+    <name>IntelliLangHub Client</name>
+    <version>1.0.0</version>
+    <vendor>IntelliLangHub</vendor>
 
-    <description>A very useful description about how great this client will be.</description>
+    <description>
+        Provides client interactions with centralized IntelliLang language injection repository IntelliLangHub.
+    </description>
+
+    <change-notes>Initial release of the plugin.</change-notes>
 
     <!-- please see https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html
          on how to target different products -->
