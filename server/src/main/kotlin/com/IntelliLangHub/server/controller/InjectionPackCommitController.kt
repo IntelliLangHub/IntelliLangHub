@@ -10,11 +10,13 @@ import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
 import org.springframework.http.HttpStatus
+import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.bind.annotation.*
 import org.springframework.web.server.ResponseStatusException
 
 @RequestMapping("/injection-pack-commit")
 @RestController
+@Transactional(readOnly = true)
 class InjectionPackCommitController(
     private val commitRepository: CommitRepository,
     private val ruleRepository: RuleRepository,
@@ -33,6 +35,7 @@ class InjectionPackCommitController(
     }
 
     @PostMapping
+    @Transactional(readOnly = false)
     fun createCommit(@RequestBody request: CreateInjectionPackCommitRequest): Commit {
         return commitRepository.save(
             Commit(
@@ -43,8 +46,8 @@ class InjectionPackCommitController(
     }
 
     @PostMapping("{id}/accept")
+    @Transactional(readOnly = false)
     fun acceptCommit(@PathVariable id: String) {
-        // TODO (use transactions)
         val commit = commitRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
         if (commit.status != CommitStatus.ACTIVE) {
             throw ResponseStatusException(HttpStatus.GONE, "commit is not active}")
@@ -63,8 +66,8 @@ class InjectionPackCommitController(
 
 
     @PostMapping("{id}/reject")
+    @Transactional(readOnly = false)
     fun rejectCommit(@PathVariable id: String) {
-        // TODO (use transactions)
         val commit = commitRepository.findById(id).orElseThrow { ResponseStatusException(HttpStatus.NOT_FOUND) }
         if (commit.status != CommitStatus.ACTIVE) {
             throw ResponseStatusException(HttpStatus.GONE, "commit is not active}")
