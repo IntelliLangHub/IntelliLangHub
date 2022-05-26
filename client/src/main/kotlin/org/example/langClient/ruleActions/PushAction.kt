@@ -4,13 +4,14 @@ import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
 import com.intellij.openapi.ui.Messages
-import kotlinx.serialization.*
-import kotlinx.serialization.json.*
 
+import java.io.FileNotFoundException
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
 import java.net.http.HttpResponse
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 @Suppress("PROVIDED_RUNTIME_TOO_LOW")  // https://github.com/Kotlin/kotlinx.serialization/issues/993
 @Serializable
@@ -27,7 +28,8 @@ class PushAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project: Project? = e.project
 
-        val serverUrl = "http://localhost:8090"
+        val serverUrl = this::class.java.classLoader.getResource("server_url")?.readText()
+        serverUrl ?: throw FileNotFoundException("File with server url not found.")
 
         val libName =
             Messages.showInputDialog(project, "Enter library name", "Library Name", Messages.getQuestionIcon())

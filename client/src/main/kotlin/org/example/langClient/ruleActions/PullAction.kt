@@ -9,6 +9,7 @@ import org.intellij.plugins.intelliLang.Configuration
 import org.intellij.plugins.intelliLang.inject.InjectorUtils
 import org.intellij.plugins.intelliLang.inject.config.BaseInjection
 
+import java.io.FileNotFoundException
 import java.net.URI
 import java.net.http.HttpClient
 import java.net.http.HttpRequest
@@ -28,7 +29,8 @@ class PullAction : AnAction() {
     override fun actionPerformed(e: AnActionEvent) {
         val project: Project = e.project ?: return
 
-        val serverUrl = "http://localhost:8090"
+        val serverUrl = this::class.java.classLoader.getResource("server_url")?.readText()
+        serverUrl ?: throw FileNotFoundException("File with server url not found.")
 
         val libTable = LibraryTablesRegistrar.getInstance()
         val libs: MutableList<Library> = ArrayList()
