@@ -1,4 +1,4 @@
-package exception
+package com.intellilanghub.server.exception
 
 class EntityNotFoundException(message: String) : Exception(message)
 

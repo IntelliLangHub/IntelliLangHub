@@ -1,7 +1,7 @@
 package com.intellilanghub.server.controller.exceptionhandler
 
-import exception.CommitNotActiveException
-import exception.EntityNotFoundException
+import com.intellilanghub.server.exception.CommitNotActiveException
+import com.intellilanghub.server.exception.EntityNotFoundException
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.ControllerAdvice
