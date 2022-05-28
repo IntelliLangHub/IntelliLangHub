@@ -19,6 +19,14 @@
         <!-- Add your extensions here -->
     </extensions>
 
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationConfigurable
+                parentId="tools"
+                instance="org.example.langClient.settings.SettingsConfigurable"
+                id="org.example.langClient.settings.SettingsConfigurable"
+                displayName="IntelliLangHub Client Settings"/>
+    </extensions>
+
     <actions>
         <!-- Add your actions here -->
         <action id="org.example.langClient.ruleActions.PullAction" class="org.example.langClient.ruleActions.PullAction"
