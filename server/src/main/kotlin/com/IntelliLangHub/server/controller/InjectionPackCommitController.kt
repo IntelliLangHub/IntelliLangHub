@@ -25,15 +25,4 @@ class InjectionPackCommitController(
     fun createCommit(@RequestBody request: CreateInjectionPackCommitRequest): Commit {
         return commitService.createCommit(request)
     }
-
-    @PostMapping("{id}/accept")
-    fun acceptCommit(@PathVariable id: String) {
-        commitService.acceptCommit(id)
-    }
-
-
-    @PostMapping("{id}/reject")
-    fun rejectCommit(@PathVariable id: String) {
-        commitService.rejectCommit(id)
-    }
 }
