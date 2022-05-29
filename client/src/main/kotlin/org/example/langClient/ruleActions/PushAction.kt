@@ -17,7 +17,7 @@ import kotlinx.serialization.json.*
 @Serializable
 data class PushedInjection(
     val library: String,
-    val injections: List<String>,
+    val injectionConfiguration: String,
 )
 
 class PushAction : AnAction() {
@@ -37,7 +37,7 @@ class PushAction : AnAction() {
             Messages.showWarningDialog(project, "Library name was not specified", "Specify Library Name")
             return
         }
-        val rule = Messages.showMultilineInputDialog(
+        val configurationText = Messages.showMultilineInputDialog(
             project,
             "Enter injection configuration",
             "Injection",
@@ -45,16 +45,16 @@ class PushAction : AnAction() {
             Messages.getQuestionIcon(),
             null
         )
-        if (rule == null) {
+        if (configurationText == null) {
             Messages.showWarningDialog(project, "Injection configuration was not specified", "Specify Injection")
             return
         }
 
-        val injection = PushedInjection(libName, listOf(rule))
+        val injection = PushedInjection(libName, configurationText)
 
         try {
             val request: HttpRequest = HttpRequest.newBuilder()
-                .uri(URI.create("$serverUrl/injection-pack-commit"))
+                .uri(URI.create("$serverUrl/commit"))
                 .header("Content-Type", "application/json")
                 .POST(HttpRequest.BodyPublishers.ofString(Json.encodeToString(injection)))
                 .build()

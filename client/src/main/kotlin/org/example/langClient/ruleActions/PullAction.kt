@@ -19,6 +19,15 @@ import kotlinx.serialization.json.*
 
 val libNameRegex = Regex("^.+?:\\s*(.+)\\s*:.*\$") // Probably needs refactoring
 
+
+@Suppress("PROVIDED_RUNTIME_TOO_LOW")  // https://github.com/Kotlin/kotlinx.serialization/issues/993
+@Serializable
+data class PulledInjection(
+    val injectionConfiguration: String,
+    val createdDate: String,
+    val library: String,
+)
+
 class PullAction : AnAction() {
     override fun update(e: AnActionEvent) {
         val project: Project? = e.project
@@ -51,7 +60,7 @@ class PullAction : AnAction() {
                 val response = client.send(request, HttpResponse.BodyHandlers.ofString())
                 if (response.statusCode() == 404) continue
 
-                rules.addAll(Json.decodeFromString<List<String>>(response.body()))
+                rules.add(Json.decodeFromString<PulledInjection>(response.body()).injectionConfiguration)
             } catch (ex: Exception) {
                 Messages.showWarningDialog(
                     project,
