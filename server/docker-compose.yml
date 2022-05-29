@@ -17,5 +17,13 @@ services:
       interval: 10s
       start_period: 30s
     command: "--bind_ip_all --replSet rs0"
-#volumes:
-#  mongodb_data:
+  #volumes:
+  #  mongodb_data:
+
+  backend:
+    build: .
+    environment:
+      - MONGODB_HOST=mongodb
+    ports:
+      - "8090:8090"
+    restart: always
