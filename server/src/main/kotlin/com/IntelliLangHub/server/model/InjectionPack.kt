@@ -5,11 +5,9 @@ import org.springframework.data.mongodb.core.mapping.Document
 import java.time.LocalDateTime
 
 @Document
-data class Rule(
-    val injection: String,
-    val library: String,
+data class InjectionPack(
+    var injectionConfiguration: String,
     val createdDate: LocalDateTime = LocalDateTime.now(),
-) {
     @Id
-    lateinit var id: String
-}
+    val library: String,
+)

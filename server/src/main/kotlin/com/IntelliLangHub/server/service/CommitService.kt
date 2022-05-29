@@ -4,9 +4,9 @@ import com.intellilanghub.server.exception.CommitNotActiveException
 import com.intellilanghub.server.exception.EntityNotFoundException
 import com.intellilanghub.server.model.Commit
 import com.intellilanghub.server.model.CommitStatus
-import com.intellilanghub.server.model.Rule
+import com.intellilanghub.server.model.InjectionPack
 import com.intellilanghub.server.repository.CommitRepository
-import com.intellilanghub.server.repository.RuleRepository
+import com.intellilanghub.server.repository.InjectionPackRepository
 import com.intellilanghub.server.request.CreateInjectionPackCommitRequest
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Transactional(readOnly = true)
 class CommitService(
     private val commitRepository: CommitRepository,
-    private val ruleRepository: RuleRepository,
+    private val injectionPackRepository: InjectionPackRepository,
     private val mongoTemplate: MongoTemplate
 ) {
 
@@ -36,7 +36,7 @@ class CommitService(
     fun createCommit(request: CreateInjectionPackCommitRequest): Commit {
         return commitRepository.save(
             Commit(
-                injections = request.injections,
+                injectionConfiguration = request.injectionConfiguration,
                 library = request.library,
             )
         )
@@ -49,16 +49,23 @@ class CommitService(
         if (commit.status != CommitStatus.ACTIVE) {
             throw CommitNotActiveException("Commit with id=$id is already ${commit.status}")
         }
-        commit.status = CommitStatus.ACCEPTED
 
+        commit.status = CommitStatus.ACCEPTED
         commitRepository.save(commit)
-        for (injection in commit.injections) {
-            val rule = Rule(
-                injection = injection,
+
+        var injectionPack = injectionPackRepository.findByLibrary(commit.library)
+
+        if (injectionPack == null) {
+            injectionPack = InjectionPack(
+                injectionConfiguration = commit.injectionConfiguration,
                 library = commit.library,
             )
-            ruleRepository.save(rule)
+        } else {
+            // TODO merge injectionConfigurations
+            injectionPack.injectionConfiguration = commit.injectionConfiguration
         }
+
+        injectionPackRepository.save(injectionPack)
     }
 
 

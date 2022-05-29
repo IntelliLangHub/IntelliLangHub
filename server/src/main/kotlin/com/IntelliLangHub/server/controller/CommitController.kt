@@ -6,9 +6,9 @@ import com.intellilanghub.server.request.CreateInjectionPackCommitRequest
 import com.intellilanghub.server.service.CommitService
 import org.springframework.web.bind.annotation.*
 
-@RequestMapping("/injection-pack-commit")
+@RequestMapping("/commit")
 @RestController
-class InjectionPackCommitController(
+class CommitController(
     private val commitService: CommitService,
 ) {
     @GetMapping

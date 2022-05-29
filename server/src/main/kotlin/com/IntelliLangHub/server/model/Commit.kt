@@ -10,7 +10,7 @@ enum class CommitStatus {
 
 @Document
 data class Commit(
-    val injections: List<String>,
+    val injectionConfiguration: String,
     val library: String,
     var status: CommitStatus = CommitStatus.ACTIVE,
     val createdDate: LocalDateTime = LocalDateTime.now(),

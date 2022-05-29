@@ -1,5 +1,6 @@
 package com.intellilanghub.server.controller
 
+import com.intellilanghub.server.model.InjectionPack
 import com.intellilanghub.server.service.InjectionPackService
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
@@ -16,7 +17,7 @@ class InjectionPackController(private val injectionPackService: InjectionPackSer
     }
 
     @GetMapping("{library}")
-    fun getInjectionPack(@PathVariable library: String): List<String> {
+    fun getInjectionPack(@PathVariable library: String): InjectionPack {
         return injectionPackService.getInjectionPack(library)
     }
 }

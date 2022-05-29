@@ -15,31 +15,34 @@
 
 </head>
 <body>
-<table class="table table-bordered table-condensed table-striped table-hover">
-    <thead>
-    <tr>
-        <th> Library</th>
-        <th> Created Date</th>
-        <th> Status</th>
-        <th> ID</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:attr="commit-id=${commit.id}">
-        <td><span th:text="${commit.library}"> Library </span></td>
-        <td><span th:text="${#temporals.format(commit.createdDate, 'yyyy-MM-dd HH:mm:ss')}"> Created Date </span>
-        </td>
-        <td><span th:text="${commit.status}"> Status </span></td>
-        <td><span th:text="${commit.id}"> ID </span></td>
-    </tr>
-    </tbody>
-</table>
-
-<pre><code class="language-xml">
-    "<LanguageInjectionConfiguration><injection injector-id="java" language="XPath"><display-name>Node.selectNodes (org.dom4j)</display-name><place><![CDATA[psiParameter().ofMethod(0, psiMethod().withName("selectNodes").withParameters("java.lang.String").definedInClass("org.dom4j.Node"))]]></place></injection></LanguageInjectionConfiguration>"
-</code></pre>
-
 <div class="container">
+    <table class="table table-bordered table-condensed table-striped table-hover">
+        <thead>
+        <tr>
+            <th> Library</th>
+            <th> Created Date</th>
+            <th> Status</th>
+            <th> ID</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:attr="commit-id=${commit.id}">
+            <td><span th:text="${commit.library}"> Library </span></td>
+            <td><span th:text="${#temporals.format(commit.createdDate, 'yyyy-MM-dd HH:mm:ss')}"> Created Date </span>
+            </td>
+            <td><span th:text="${commit.status}"> Status </span></td>
+            <td><span th:text="${commit.id}"> ID </span></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <pre><code class="language-xml" th:text="${commit.injectionConfiguration}">
+    </code></pre>
+
+    <pre><code class="language-xml">
+        TODO display diff
+    </code></pre>
+
     <form method="post" style=" float: left;" th:action="'/moderation/commit/' + ${commit.id} + '/accept'">
         <button class="btn btn-primary" style="background-color:green" type="submit">Accept</button>
     </form>
