@@ -14,6 +14,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("script-runtime"))
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.2")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.6.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")

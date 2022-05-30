@@ -1,5 +1,8 @@
 package org.example.langClient.ruleActions
 
+import org.example.langClient.settings.createCredentialAttributes
+import com.intellij.ide.passwordSafe.PasswordSafe
+
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent
 import com.intellij.openapi.project.Project
@@ -30,6 +33,14 @@ class PushAction : AnAction() {
 
         val serverUrl = this::class.java.classLoader.getResource("server_url")?.readText()
         serverUrl ?: throw FileNotFoundException("File with server url not found.")
+
+        val credentialAttributes = createCredentialAttributes("githubToken")
+        val credentials = PasswordSafe.instance.get(credentialAttributes)
+        /*
+        if (credentials != null) {
+            // TODO: send token to server
+        }
+         */
 
         val libName =
             Messages.showInputDialog(project, "Enter library name", "Library Name", Messages.getQuestionIcon())
