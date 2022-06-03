@@ -8,6 +8,7 @@ import com.intellilanghub.server.model.InjectionPack
 import com.intellilanghub.server.repository.CommitRepository
 import com.intellilanghub.server.repository.InjectionPackRepository
 import com.intellilanghub.server.request.CreateInjectionPackCommitRequest
+import com.intellilanghub.server.utils.mergeInjectionConfigurations
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -17,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional
 @Service
 @Transactional(readOnly = true)
 class CommitService(
+    private val injectionPackService: InjectionPackService,
     private val commitRepository: CommitRepository,
     private val injectionPackRepository: InjectionPackRepository,
     private val mongoTemplate: MongoTemplate
@@ -30,6 +32,18 @@ class CommitService(
 
     fun getCommit(id: String): Commit {
         return commitRepository.findById(id).orElseThrow { EntityNotFoundException("Comment with id=$id not found") }
+    }
+
+    fun getCommitDiff(commit: Commit): CommitDiff {
+        val currentInjectionConfiguration: String = try {
+            injectionPackService.getInjectionPack(commit.library).injectionConfiguration
+        } catch (e: EntityNotFoundException) {
+            ""
+        }
+
+        val newInjectionConfiguration =
+            mergeInjectionConfigurations(currentInjectionConfiguration, commit.injectionConfiguration)
+        return CommitDiff(currentInjectionConfiguration, newInjectionConfiguration)
     }
 
     @Transactional(readOnly = false)
@@ -61,8 +75,8 @@ class CommitService(
                 library = commit.library,
             )
         } else {
-            // TODO merge injectionConfigurations
-            injectionPack.injectionConfiguration = commit.injectionConfiguration
+            injectionPack.injectionConfiguration =
+                mergeInjectionConfigurations(injectionPack.injectionConfiguration, commit.injectionConfiguration)
         }
 
         injectionPackRepository.save(injectionPack)
@@ -81,3 +95,8 @@ class CommitService(
         commitRepository.save(commit)
     }
 }
+
+data class CommitDiff(
+    val currentInjectionConfiguration: String,
+    val newInjectionConfiguration: String
+)

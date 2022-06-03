@@ -39,9 +39,13 @@ class ModerationController(
     fun getCommit(@PathVariable id: String, model: Model): String {
         val commit = commitService.getCommit(id)
         model.addAttribute("commit", commit)
+
         if (commit.status == CommitStatus.ACTIVE) {
+            val diff = commitService.getCommitDiff(commit)
+            model.addAttribute("diff", diff)
             return "commit-active"
         }
+
         return "commit-resolved"
     }
 

@@ -6,43 +6,55 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
 
     <!-- Include Bootstrap -->
-    <link crossorigin="anonymous" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
-          integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" rel="stylesheet">
-
-    <link href="/webjars/highlightjs/11.5.0/styles/default.min.css" rel="stylesheet">
-    <script src="/webjars/highlightjs/11.5.0/highlight.min.js"></script>
-    <script>hljs.highlightAll();</script>
+    <link crossorigin="anonymous" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
 
 </head>
 <body>
-<div class="container">
-    <table class="table table-bordered table-condensed table-striped table-hover">
-        <thead>
-        <tr>
-            <th> Library</th>
-            <th> Created Date</th>
-            <th> Status</th>
-            <th> ID</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:attr="commit-id=${commit.id}">
-            <td><span th:text="${commit.library}"> Library </span></td>
-            <td><span th:text="${#temporals.format(commit.createdDate, 'yyyy-MM-dd HH:mm:ss')}"> Created Date </span>
-            </td>
-            <td><span th:text="${commit.status}"> Status </span></td>
-            <td><span th:text="${commit.id}"> ID </span></td>
-        </tr>
-        </tbody>
-    </table>
+<table class="table table-bordered table-condensed table-striped table-hover">
+    <thead>
+    <tr>
+        <th> Library</th>
+        <th> Created Date</th>
+        <th> Status</th>
+        <th> ID</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:attr="commit-id=${commit.id}">
+        <td><span th:text="${commit.library}"> Library </span></td>
+        <td><span th:text="${#temporals.format(commit.createdDate, 'yyyy-MM-dd HH:mm:ss')}"> Created Date </span>
+        </td>
+        <td><span th:text="${commit.status}"> Status </span></td>
+        <td><span th:text="${commit.id}"> ID </span></td>
+    </tr>
+    </tbody>
+</table>
 
-    <pre><code class="language-xml" th:text="${commit.injectionConfiguration}">
-    </code></pre>
+<ul class="nav nav-tabs" id="viewTab" role="tablist">
+    <li class="nav-item">
+        <a aria-controls="diff-editor" aria-selected="true" class="nav-link active" data-toggle="tab"
+           href="#diff-editor"
+           id="diff-editor-tab"
+           role="tab">Diff with current version</a>
+    </li>
+    <li class="nav-item">
+        <a aria-controls="commit-injections-editor" aria-selected="false" class="nav-link" data-toggle="tab"
+           href="#commit-injections-editor" id="commit-injections-editor-tab"
+           role="tab">Commit injection configuration</a>
+    </li>
+</ul>
+<div class="tab-content" id="viewTabContent" style="height:78vh;">
+    <div aria-labelledby="diff-editor-tab" class="tab-pane active" id="diff-editor" role="tabpanel"
+         style="height: 100%;">
+    </div>
+    <div aria-labelledby="commit-injections-editor-tab" class="tab-pane" id="commit-injections-editor"
+         role="tabpanel"
+         style="height: 100%;">
+    </div>
+</div>
 
-    <pre><code class="language-xml">
-        TODO display diff
-    </code></pre>
-
+<div>
     <form method="post" style=" float: left;" th:action="'/moderation/commit/' + ${commit.id} + '/accept'">
         <button class="btn btn-primary" style="background-color:green" type="submit">Accept</button>
     </form>
@@ -53,5 +65,59 @@
 </div>
 
 
+<script crossorigin="anonymous"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js"></script>
+<script crossorigin="anonymous"
+        integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+        src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js"></script>
+
+
+<script src="https://www.matrixlead.com/monaco-editor/min/vs/loader.js"></script>
+<script th:inline="javascript">
+        require.config({ paths: { 'vs': 'https://www.matrixlead.com/monaco-editor/min/vs' }})
+
+        require(["vs/editor/editor.main"], function () {
+            var commitEditor = monaco.editor.create(document.getElementById('commit-injections-editor'), {
+                value:/*[[${commit.injectionConfiguration}]]*/,
+                language: 'xml',
+                readOnly: true,
+                automaticLayout: true
+            });
+
+
+            var originalModel = monaco.editor.createModel(
+                /*[[${diff.currentInjectionConfiguration}]]*/,
+                'xml',
+            );
+            var modifiedModel = monaco.editor.createModel(
+                /*[[${diff.newInjectionConfiguration}]]*/,
+                'xml'
+            );
+
+            var diffEditor = monaco.editor.createDiffEditor(document.getElementById('diff-editor'), {
+                language: 'xml'
+            });
+
+            diffEditor.setModel({
+                original: originalModel,
+                modified: modifiedModel,
+                language: 'xml',
+                readOnly: true,
+                automaticLayout: true
+            });
+        });
+
+
+
+
+
+
+
+
+</script>
 </body>
 </html>
