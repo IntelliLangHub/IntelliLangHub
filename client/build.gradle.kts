@@ -1,12 +1,13 @@
 plugins {
-    id("org.jetbrains.intellij") version "1.3.1"
+    id("org.jetbrains.intellij") version "1.6.0"
     kotlin("jvm") version "1.6.10"
     kotlin("plugin.serialization") version "1.6.10"
     java
 }
 
-group = "org.example"
-version = "1.0-SNAPSHOT"
+group = "org.intelliLangHub"
+version = "0.9.1"
+val changes = """Initial release of the plugin.""".trimIndent()
 
 repositories {
     mavenCentral()
@@ -21,14 +22,15 @@ dependencies {
 
 // See https://github.com/JetBrains/gradle-intellij-plugin/
 intellij {
-    version.set("2021.3.1")
+    version.set("2022.1")
     plugins.add("org.intellij.intelliLang")
 }
 tasks {
     patchPluginXml {
-        changeNotes.set("""
-            Add change notes here.<br>
-            <em>most HTML tags may be used</em>        """.trimIndent())
+        version.set("${project.version}")
+        changeNotes.set(changes)
+        sinceBuild.set("213")
+        untilBuild.set("221.*")
     }
 }
 tasks.getByName<Test>("test") {

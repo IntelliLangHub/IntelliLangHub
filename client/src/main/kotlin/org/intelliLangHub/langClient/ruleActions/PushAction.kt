@@ -1,4 +1,4 @@
-package org.example.langClient.ruleActions
+package org.intelliLangHub.langClient.ruleActions
 
 import com.intellij.openapi.actionSystem.AnAction
 import com.intellij.openapi.actionSystem.AnActionEvent

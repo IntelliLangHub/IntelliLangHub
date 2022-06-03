@@ -1,11 +1,15 @@
 <idea-plugin>
-    <id>org.example.langClient</id>
+    <id>org.intelliLangHub.langClient</id>
     <name>IntelliLangHub Client</name>
-    <version>1.0.0</version>
     <vendor>IntelliLangHub</vendor>
 
     <description>
-        Provides client interactions with centralized IntelliLang language injection repository IntelliLangHub.
+        <![CDATA[
+            Provides client interactions with centralized IntelliLang language injection repository IntelliLangHub.<br>
+            Adds Pull and Commit buttons to the <b>Tools</b> menu.<br><br>
+            <h3>WARNING</h3><br>
+            This plugin sends names of libraries used in project to the IntelliLangHub server when pulling injections.
+        ]]>
     </description>
 
     <change-notes>Initial release of the plugin.</change-notes>
@@ -21,12 +25,12 @@
 
     <actions>
         <!-- Add your actions here -->
-        <action id="org.example.langClient.ruleActions.PullAction" class="org.example.langClient.ruleActions.PullAction"
+        <action id="org.intelliLangHub.langClient.ruleActions.PullAction" class="org.intelliLangHub.langClient.ruleActions.PullAction"
                 text="Pull Injections" description="Pull injections from repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
 
-        <action id="org.example.langClient.ruleActions.PushAction" class="org.example.langClient.ruleActions.PushAction"
+        <action id="org.intelliLangHub.langClient.ruleActions.PushAction" class="org.intelliLangHub.langClient.ruleActions.PushAction"
                 text="Commit Injection" description="Commit injection to repository">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
         </action>
