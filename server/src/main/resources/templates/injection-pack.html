@@ -11,38 +11,23 @@
 
 </head>
 <body>
+
 <table class="table table-bordered table-condensed table-striped table-hover">
     <thead>
     <tr>
         <th> Library</th>
-        <th> Created Date</th>
-        <th> Status</th>
-        <th> ID</th>
     </tr>
     </thead>
     <tbody>
-    <tr th:attr="commit-id=${commit.id}">
-        <td><span th:text="${commit.library}"> Library </span></td>
-        <td><span th:text="${#temporals.format(commit.createdDate, 'yyyy-MM-dd HH:mm:ss')}"> Created Date </span>
-        </td>
-        <td><span th:text="${commit.status}"> Status </span></td>
-        <td><span th:text="${commit.id}"> ID </span></td>
+    <tr class="table-row" th:attr="library=${pack.library}">
+        <td><span th:text="${pack.library}"> Library </span></td>
     </tr>
     </tbody>
 </table>
 
-<ul class="nav nav-tabs" id="viewTab" role="tablist">
-    <li class="nav-item">
-        <a aria-controls="commit-injections-editor" aria-selected="true" class="nav-link active" data-toggle="tab"
-           href="#commit-injections-editor" id="commit-injections-editor-tab"
-           role="tab">Commit injection configuration</a>
-    </li>
-</ul>
-<div class="tab-content" id="viewTabContent" style="height:78vh;">
-    <div aria-labelledby="commit-injections-editor-tab" class="tab-pane active" id="commit-injections-editor"
-         role="tabpanel"
-         style="height: 100%;">
-    </div>
+<div aria-labelledby="commit-injections-editor-tab" class="tab-pane active" id="commit-injections-editor"
+     role="tabpanel"
+     style="height: 86vh;">
 </div>
 
 
@@ -63,13 +48,16 @@
 
         require(["vs/editor/editor.main"], function () {
             var commitEditor = monaco.editor.create(document.getElementById('commit-injections-editor'), {
-                value:/*[[${commit.injectionConfiguration}]]*/,
+                value:/*[[${pack.injectionConfiguration}]]*/,
                 language: 'xml',
                 readOnly: true,
                 automaticLayout: true
             });
         });
 
+
+
 </script>
+
 </body>
 </html>

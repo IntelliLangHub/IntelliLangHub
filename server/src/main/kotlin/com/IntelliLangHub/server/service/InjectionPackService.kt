@@ -25,6 +25,6 @@ class InjectionPackService(
         val query = Query()
         query.addCriteria(Criteria.where(InjectionPack::library.name).`is`(library))
         return injectionPackRepository.findByLibrary(library)
-            ?: throw EntityNotFoundException("No rules found for library $library")
+            ?: throw EntityNotFoundException("Injection pack not found for library: $library")
     }
 }

@@ -28,7 +28,7 @@ dependencies {
 
 dependencies {
 	implementation("org.webjars:jquery:3.6.0")
-	implementation("org.webjars:highlightjs:11.5.0")
+	implementation("org.webjars:datatables:1.11.4")
 }
 
 dependencies {

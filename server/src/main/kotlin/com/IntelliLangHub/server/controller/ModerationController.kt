@@ -2,6 +2,7 @@ package com.intellilanghub.server.controller
 
 import com.intellilanghub.server.model.CommitStatus
 import com.intellilanghub.server.service.CommitService
+import com.intellilanghub.server.service.InjectionPackService
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping
@@ -14,12 +15,26 @@ import org.springframework.web.servlet.view.RedirectView
 @Controller
 class ModerationController(
     private val commitService: CommitService,
+    private val injectionPackService: InjectionPackService,
 ) {
 
     @GetMapping
     fun index(model: Model): String {
         return "index"
     }
+
+    @GetMapping("injection-packs")
+    fun getInjectionPacks(model: Model): String {
+        model.addAttribute("libraries", injectionPackService.getInjectionPackLibraries())
+        return "injection-packs"
+    }
+
+    @GetMapping("injection-pack/{library}")
+    fun getInjectionPack(@PathVariable library: String, model: Model): String {
+        model.addAttribute("pack", injectionPackService.getInjectionPack(library))
+        return "injection-pack"
+    }
+
 
     @GetMapping("commits")
     fun getCommits(model: Model): String {
