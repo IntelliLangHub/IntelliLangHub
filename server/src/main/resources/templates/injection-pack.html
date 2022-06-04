@@ -27,8 +27,14 @@
 
 <div aria-labelledby="commit-injections-editor-tab" class="tab-pane active" id="commit-injections-editor"
      role="tabpanel"
-     style="height: 86vh;">
+     style="height: 82.5vh;">
 </div>
+
+<form id="injectionConfigurationForm" method="post" onsubmit="SubmitInjectionConfiguration(this)"
+      style=" float: left;" th:action="'/moderation/injection-pack/' + ${pack.library}">
+    <input name="injectionConfiguration" type="hidden" value=""/>
+    <button class="btn btn-primary" style="background-color:blue" type="submit">Update</button>
+</form>
 
 
 <script crossorigin="anonymous"
@@ -45,17 +51,19 @@
 <script src="https://www.matrixlead.com/monaco-editor/min/vs/loader.js"></script>
 <script th:inline="javascript">
         require.config({ paths: { 'vs': 'https://www.matrixlead.com/monaco-editor/min/vs' }})
-
         require(["vs/editor/editor.main"], function () {
-            var commitEditor = monaco.editor.create(document.getElementById('commit-injections-editor'), {
+            window.commitEditor = monaco.editor.create(document.getElementById('commit-injections-editor'), {
                 value:/*[[${pack.injectionConfiguration}]]*/,
                 language: 'xml',
-                readOnly: true,
+                readOnly: false,
                 automaticLayout: true
             });
         });
 
-
+        function SubmitInjectionConfiguration (f) {
+            console.log("SubmitInjectionConfiguration");
+            f.injectionConfiguration.value = window.commitEditor.getValue()
+        }
 
 </script>
 

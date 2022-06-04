@@ -27,4 +27,17 @@ class InjectionPackService(
         return injectionPackRepository.findByLibrary(library)
             ?: throw EntityNotFoundException("Injection pack not found for library: $library")
     }
+
+    @Transactional(readOnly = false)
+    fun updateInjectionPack(library: String, injectionConfiguration: String) {
+        val query = Query()
+        query.addCriteria(Criteria.where(InjectionPack::library.name).`is`(library))
+        val existing = injectionPackRepository.findByLibrary(library)
+        injectionPackRepository.save(
+            InjectionPack(
+                library = library,
+                injectionConfiguration = injectionConfiguration
+            )
+        )
+    }
 }

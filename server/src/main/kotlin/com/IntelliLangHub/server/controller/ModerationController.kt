@@ -3,13 +3,14 @@ package com.intellilanghub.server.controller
 import com.intellilanghub.server.model.CommitStatus
 import com.intellilanghub.server.service.CommitService
 import com.intellilanghub.server.service.InjectionPackService
+import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.util.MultiValueMap
+import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import org.springframework.web.servlet.view.RedirectView
+
 
 @RequestMapping("/moderation")
 @Controller
@@ -33,6 +34,18 @@ class ModerationController(
     fun getInjectionPack(@PathVariable library: String, model: Model): String {
         model.addAttribute("pack", injectionPackService.getInjectionPack(library))
         return "injection-pack"
+    }
+
+    @PostMapping("injection-pack/{library}")
+    fun postInjectionPack(
+        @PathVariable library: String, @RequestBody formData: MultiValueMap<String, String>, model: Model
+    ): RedirectView {
+        val injectionConfiguration = formData.getFirst("injectionConfiguration")
+            ?: throw ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "Missing injectionConfiguration"
+            )
+        injectionPackService.updateInjectionPack(library, injectionConfiguration)
+        return RedirectView("/moderation/injection-pack/$library")
     }
 
 
