@@ -3,6 +3,7 @@ package com.intellilanghub.server.service
 import com.intellilanghub.server.exception.EntityNotFoundException
 import com.intellilanghub.server.model.InjectionPack
 import com.intellilanghub.server.repository.InjectionPackRepository
+import com.intellilanghub.server.utils.refactorInjectionConfiguration
 import org.springframework.data.mongodb.core.MongoTemplate
 import org.springframework.data.mongodb.core.query.Criteria
 import org.springframework.data.mongodb.core.query.Query
@@ -33,10 +34,13 @@ class InjectionPackService(
         val query = Query()
         query.addCriteria(Criteria.where(InjectionPack::library.name).`is`(library))
         val existing = injectionPackRepository.findByLibrary(library)
+
+        val injectionConfigurationRefactored = refactorInjectionConfiguration(injectionConfiguration, library)
+
         injectionPackRepository.save(
             InjectionPack(
                 library = library,
-                injectionConfiguration = injectionConfiguration
+                injectionConfiguration = injectionConfigurationRefactored
             )
         )
     }
