@@ -12,15 +12,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 </head>
 <body>
-<div class="list-group">
-    <a class="list-group-item" href="/moderation/active-commits">Active commits</a>
-    <a class="list-group-item" href="/moderation/commits">All commits</a>
-    <a class="list-group-item" href="/moderation/injection-packs">Injection packs</a>
-</div>
-
 <div align="center">
-    <form th:action="@{/logout}" method="post">
-        <button class="btn btn-primary" type="submit">Sign Out</button>
+    <h5>You need to log in before accessing this page</h5>
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div><label> Username : <input type="text" class="form-control" name="username"/> </label></div>
+        <div><label> Password: <input type="password" class="form-control" name="password"/> </label></div>
+        <div><button class="btn btn-primary" type="submit">Sign In</button></div>
     </form>
 </div>
 </body>
