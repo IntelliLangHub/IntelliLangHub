@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "org.intelliLangHub"
-version = "0.9.1"
+version = "0.9.2"
 val changes = """Initial release of the plugin.""".trimIndent()
 
 repositories {
