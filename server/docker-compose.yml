@@ -5,20 +5,16 @@ services:
     image: mongo:latest
     restart: on-failure
     environment:
-      #      - MONGO_INITDB_ROOT_USERNAME=user
-      #      - MONGO_INITDB_ROOT_PASSWORD=123456
       - MONGO_REPLICA_SET_NAME=rs0
-    #    volumes:
-    #      - mongodb_data:/data/db
+    volumes:
+      - mongodb_data:/data/db
     ports:
-      - 27017:27017
+      - "27017:27017"
     healthcheck:
       test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo  --quiet) -eq 1
       interval: 10s
       start_period: 30s
     command: "--bind_ip_all --replSet rs0"
-  #volumes:
-  #  mongodb_data:
 
   backend:
     build: .
@@ -27,3 +23,6 @@ services:
     ports:
       - "8090:8090"
     restart: always
+
+volumes:
+  mongodb_data:
