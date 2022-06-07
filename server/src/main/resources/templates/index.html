@@ -1,0 +1,27 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!-- Include Bootstrap -->
+    <link crossorigin="anonymous" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div class="list-group">
+    <a class="list-group-item" href="/moderation/active-commits">Active commits</a>
+    <a class="list-group-item" href="/moderation/commits">All commits</a>
+    <a class="list-group-item" href="/moderation/injection-packs">Injection packs</a>
+</div>
+
+<div align="center">
+    <form th:action="@{/logout}" method="post">
+        <button class="btn btn-primary" type="submit">Sign Out</button>
+    </form>
+</div>
+</body>
+</html>

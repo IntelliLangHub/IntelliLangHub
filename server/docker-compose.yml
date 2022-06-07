@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  mongodb:
+    image: mongo:latest
+    restart: on-failure
+    environment:
+      - MONGO_REPLICA_SET_NAME=rs0
+    ports:
+      - "27017:27017"
+    healthcheck:
+      test: test $$(echo "rs.initiate().ok || rs.status().ok" | mongo  --quiet) -eq 1
+      interval: 10s
+      start_period: 30s
+    command: "--bind_ip_all --replSet rs0"
+
+  backend:
+    build: .
+    environment:
+      - MONGODB_HOST=mongodb
+    ports:
+      - "8090:8090"
+    restart: always

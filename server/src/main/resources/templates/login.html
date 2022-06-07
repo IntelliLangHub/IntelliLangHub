@@ -1,0 +1,30 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta content="IE=edge" http-equiv="X-UA-Compatible">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+
+    <!-- Include Bootstrap -->
+    <link crossorigin="anonymous" href="/webjars/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" rel="stylesheet">
+
+    <script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
+</head>
+<body>
+<div align="center">
+    <h5>You need to log in before accessing this page</h5>
+    <div th:if="${param.error}">
+        Invalid username and password.
+    </div>
+    <div th:if="${param.logout}">
+        You have been logged out.
+    </div>
+    <form th:action="@{/login}" method="post">
+        <div><label> Username : <input type="text" class="form-control" name="username"/> </label></div>
+        <div><label> Password: <input type="password" class="form-control" name="password"/> </label></div>
+        <div><button class="btn btn-primary" type="submit">Sign In</button></div>
+    </form>
+</div>
+</body>
+</html>
