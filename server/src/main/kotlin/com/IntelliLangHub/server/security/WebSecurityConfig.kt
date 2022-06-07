@@ -26,6 +26,8 @@ class WebSecurityConfig(private val userDetailsService: UserDetailsService) : We
             .and()
             .logout()
             .permitAll()
+            .and()
+            .csrf().disable()
     }
 
     @Throws(Exception::class)
