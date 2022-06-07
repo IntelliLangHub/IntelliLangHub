@@ -37,8 +37,8 @@ fun readInjectionConfiguration(injectionConfigurationXml: String): LanguageInjec
     val serializer: Serializer = Persister()
     try {
         return serializer.read(LanguageInjectionConfiguration::class.java, injectionConfigurationXml)
-    } catch (e: Exception) {
-        throw InvalidLanguageConfigurationException("Invalid language configuration: $e")
+    } catch (e: javax.xml.stream.XMLStreamException) {
+        throw InvalidLanguageConfigurationException("Invalid language configuration: ${e.message}")
     }
 }
 
@@ -48,8 +48,8 @@ fun writeInjectionConfiguration(injectionConfiguration: LanguageInjectionConfigu
 
     try {
         serializer.write(injectionConfiguration, stream)
-    } catch (e: Exception) {
-        throw InvalidLanguageConfigurationException("Invalid language configuration: $e")
+    } catch (e: javax.xml.stream.XMLStreamException) {
+        throw InvalidLanguageConfigurationException("Invalid language configuration: ${e.message}")
     }
 
     return stream.toString()
@@ -59,7 +59,7 @@ fun validateConfiguration(injectionConfigurationXml: String): Boolean {
     val serializer: Serializer = Persister()
     try {
         return serializer.validate(LanguageInjectionConfiguration::class.java, injectionConfigurationXml)
-    } catch (e: Exception) {
-        throw InvalidLanguageConfigurationException("Invalid language configuration: $e")
+    } catch (e: javax.xml.stream.XMLStreamException) {
+        throw InvalidLanguageConfigurationException("Invalid language configuration: ${e.message}")
     }
 }
