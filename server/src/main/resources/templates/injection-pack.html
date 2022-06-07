@@ -25,7 +25,7 @@
     </tbody>
 </table>
 
-<div aria-labelledby="commit-injections-editor-tab" class="tab-pane active" id="commit-injections-editor"
+<div aria-labelledby="editor-tab" class="tab-pane active" id="editor"
      role="tabpanel"
      style="height: 82.5vh;">
 </div>
@@ -52,7 +52,7 @@
 <script th:inline="javascript">
         require.config({ paths: { 'vs': 'https://www.matrixlead.com/monaco-editor/min/vs' }})
         require(["vs/editor/editor.main"], function () {
-            window.commitEditor = monaco.editor.create(document.getElementById('commit-injections-editor'), {
+            window.editor = monaco.editor.create(document.getElementById('editor'), {
                 value:/*[[${pack.injectionConfiguration}]]*/,
                 language: 'xml',
                 readOnly: false,
@@ -61,8 +61,7 @@
         });
 
         function SubmitInjectionConfiguration (f) {
-            console.log("SubmitInjectionConfiguration");
-            f.injectionConfiguration.value = window.commitEditor.getValue()
+            f.injectionConfiguration.value = window.editor.getValue()
         }
 
 </script>
