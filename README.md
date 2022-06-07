@@ -9,4 +9,4 @@ IntelliLangHub server is a service that accepts, validates, stores and provides 
 
 
 ## Client
-IntelliLangHub client is an IntelliJ IDEA plugin that pull and commit injections to server and interacts with IntelliLang plugin to highlight language injections in IDE editor.
+IntelliLangHub client is an IntelliJ IDEA plugin that pull and commit injections to the server and interacts with IntelliLang plugin to highlight language injections in IDE editor.
