@@ -6,8 +6,6 @@ services:
     restart: on-failure
     environment:
       - MONGO_REPLICA_SET_NAME=rs0
-    volumes:
-      - mongodb_data:/data/db
     ports:
       - "27017:27017"
     healthcheck:
@@ -23,6 +21,3 @@ services:
     ports:
       - "8090:8090"
     restart: always
-
-volumes:
-  mongodb_data:
