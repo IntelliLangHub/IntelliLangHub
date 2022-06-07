@@ -60,7 +60,26 @@ class PushAction : AnAction() {
                 .build()
 
             val client: HttpClient = HttpClient.newBuilder().build()
-            client.send(request, HttpResponse.BodyHandlers.ofString())
+            val response = client.send(request, HttpResponse.BodyHandlers.ofString())
+
+            when (response.statusCode()) {
+                200 -> Messages.showMessageDialog(
+                    project,
+                    "Your injection will appear in the repository after moderation",
+                    "Injection Created",
+                    Messages.getInformationIcon()
+                )
+                400 -> Messages.showWarningDialog(
+                    "Configuration does not match required scheme",
+                    "Bad Commit",
+                )
+                else -> {
+                    Messages.showWarningDialog(
+                        "Error with status code ${response.statusCode()} occurred during commit processing",
+                        "Commit Error",
+                    )
+                }
+            }
         } catch (ex: Exception) {
             Messages.showWarningDialog(
                 project,
@@ -68,12 +87,5 @@ class PushAction : AnAction() {
             )
             return
         }
-
-        Messages.showMessageDialog(
-            project,
-            "Your injection will appear in the repository after moderation",
-            "Injection Created",
-            Messages.getInformationIcon()
-        )
     }
 }
