@@ -32,6 +32,9 @@ dependencies {
 dependencies {
 	implementation("org.webjars:jquery:3.6.0")
 	implementation("org.webjars:datatables:1.11.4")
+	implementation("org.webjars:bootstrap:4.3.1")
+	implementation("org.webjars.npm:monaco-editor:0.33.0")
+	implementation("org.webjars.npm:popper.js:1.14.7")
 }
 
 dependencies {
